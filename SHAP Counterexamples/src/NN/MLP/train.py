@@ -1,3 +1,7 @@
+### ---------------------------------------
+### Model training for future usage (torch)
+### ---------------------------------------
+
 from pathlib import Path
 import numpy as np
 import torch

@@ -1,3 +1,7 @@
+### ----------------------------------------------------------------
+### Temporary testing file for Neural Network Shapley implementation
+### ----------------------------------------------------------------
+
 import numpy as np
 import torch
 
@@ -5,7 +9,7 @@ from pathlib import Path
 
 from NN.MLP.Utils.prediction import predict
 from NN.MLP.model import MLP
-from SHAP.exact_shapely import exact_shapely
+from SHAP.exact_NN_shapely import exact_shapely
 
 
 def feature_importance(model, X):

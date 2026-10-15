@@ -1,3 +1,7 @@
+### ----------------------------------------------------
+### Various Model Architectures for future usage (torch) 
+### ----------------------------------------------------
+
 from torch import nn
 
 class MLP(nn.Module):

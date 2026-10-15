@@ -1,3 +1,7 @@
+### --------------------------------------------------------------------
+### prediction function (may be placed somewhere else for less overhead)
+### --------------------------------------------------------------------
+
 import torch
 
 def predict(model, data):
