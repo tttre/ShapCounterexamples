@@ -4,7 +4,7 @@
 ### -------------------------------------------------------------------------------------------
 
 import numpy as np
-from Utils.score_functions import polynomial_score, binary_score
+from Utils.score_functions import polynomial_score, single_feature_binary_score
 from Utils.generators import uniform_bit_generator, bernoulli_bit_generator
 from pathlib import Path
 
@@ -18,7 +18,7 @@ def generate_dataset(n_features):
     N=20
     ## ---------------------------
     X = np.asarray(bernoulli_bit_generator(n_features,p,N), dtype=np.float32)
-    scores = binary_score(X).astype(np.float32)
+    scores = single_feature_binary_score(X).astype(np.float32)
     return {"X": X, "scores": scores}
 
 
@@ -29,8 +29,7 @@ def main():
     cache_dir.mkdir(parents=True, exist_ok=True)
 
     output_path = cache_dir / "bernouilli_bit_data.npz"
-    np.savez(output_path, **data)
-
+    np.savez(output_path, X=data["X"], scores=data["scores"])
     print(f"Saved to: {output_path}")
 
 
