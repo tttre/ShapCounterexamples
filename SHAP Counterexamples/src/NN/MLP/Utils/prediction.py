@@ -1,5 +1,5 @@
 ### --------------------------------------------------------------------
-### prediction function (may be placed somewhere else for less overhead)
+### Prediction function (may be placed somewhere else for less overhead)
 ### --------------------------------------------------------------------
 
 import torch
