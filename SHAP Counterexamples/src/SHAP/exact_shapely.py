@@ -7,7 +7,7 @@ from itertools import combinations
 from math import comb
 from .Utils.value_functions import mean_value_function
 
-### Determine the Shapley Value for a given feature based on the value function
+### Determine the Shapley value for a given feature based on the value function
 def feature_shapely(x, X, feature, func):
     """
     x: The input sample for which the Shapely values should be computed

@@ -1,5 +1,5 @@
 ### ----------------------------------------------------------------
-### Temporary testing file for Neural Network Shapley implementation
+### Temporary testing file for exact Shapley implementation
 ### ----------------------------------------------------------------
 
 import numpy as np
