@@ -6,3 +6,6 @@ dependencies = [
     "numpy>=2.5.3",
     "torch>=2.14.1",
 ]
+
+[tool.pyright]
+extraPaths = ["SHAP Counterexamples/src"]
