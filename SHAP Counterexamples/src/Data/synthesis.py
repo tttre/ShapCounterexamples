@@ -13,10 +13,11 @@ def generate_dataset(n_features):
     """
     n_features: Number of features in the dataset.
     """
+    ### ---------------------------
     ### For bernoulli distribution 
     p=0.5
     N=20
-    ## ---------------------------
+    ### ---------------------------
     X = np.asarray(bernoulli_bit_generator(n_features,p,N), dtype=np.float32)
     scores = single_feature_binary_score(X).astype(np.float32)
     return {"X": X, "scores": scores}
