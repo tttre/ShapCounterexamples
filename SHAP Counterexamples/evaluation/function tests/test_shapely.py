@@ -7,16 +7,16 @@ import numpy as np
 from pathlib import Path
 import sys
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from Data.Utils.score_functions import single_feature_binary_score
+from Data.Utils.score_functions import binary_score
 from SHAP.exact_shapely import exact_shapely
 
 
 def feature_importance(X):
     shap_values = np.array([
-        exact_shapely(x, X, single_feature_binary_score)
+        exact_shapely(x, X, binary_score)
         for x in X
     ])
 

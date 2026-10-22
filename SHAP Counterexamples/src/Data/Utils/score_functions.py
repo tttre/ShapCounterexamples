@@ -4,8 +4,17 @@
 
 import numpy as np
 
+### -----------------------------------------------------------
+### Single Feature Scores
+def binary_score(X):
+        return X[:, 0]
+### -----------------------------------------------------------
+
+### -----------------------------------------------------------
+### Three Feature Score
 def polynomial_score(X):
         return 0.1*X[:, 0] + 0.2*X[:, 1] + 0.3*X[:, 2]
 
-def single_feature_binary_score(X):
-        return X[:, 0]
+def nonlinear_score(X,l,a,b,c):
+        return a*X[:, 0] + b*X[:, 1] + c*X[:, 2] + l*X[:, 0]*X[:, 1]*X[:, 2]
+### -----------------------------------------------------------

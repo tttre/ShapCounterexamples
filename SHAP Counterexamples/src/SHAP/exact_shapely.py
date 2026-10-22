@@ -48,3 +48,10 @@ def exact_shapely(x, X, func):
         phi[feature] = feature_shapely(x, X, feature, func)
 
     return phi
+
+
+def feature_importance(X, func):
+    """Mean absolute conditional Shapley values over the dataset."""
+    rows, counts = np.unique(X, axis=0, return_counts=True)
+    shap_values = np.array([exact_shapely(x, X, func) for x in rows])
+    return np.average(np.abs(shap_values), axis=0, weights=counts)
