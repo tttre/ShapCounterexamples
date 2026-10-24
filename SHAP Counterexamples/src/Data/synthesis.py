@@ -1,15 +1,25 @@
 ### -------------------------------------------------------------------------------------------
-### Generate .npz file containing dataset, specifically {data, scores}, where data is generated
-### for some generator, and scores is generated for some score function.
+### Generate .npz/.csv file containing dataset
+### for some generator, (for some sampler) and for some score function
 ### -------------------------------------------------------------------------------------------
 
-import numpy as np
-from .Utils.score_functions import nonlinear_score
-from .Utils.generators import uniform_bit_generator, bernoulli_bit_generator, hidden_bit_generator
-
 from pathlib import Path
+import sys
 
-### Generate Dataset based on a generator and a score function, and save it to a .npz file.
+import numpy as np
+import pandas as pd
+
+# Preserve relative imports when this file is run directly.
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+    __package__ = "src.Data"
+
+from .Utils.score_functions import nonlinear_score, binary_score
+from .Utils.generators import binary_feature_generator, gaussian_feature_generator, uniform_feature_generator, count_feature_generator, categorical_feature_generator, uniform_bit_generator, bernoulli_bit_generator, hidden_bit_generator
+
+### -------------------------------------------------------------------------------------------
+### Primitive generators for synthetic datasets
+### Generate Dataset based on a generator and a score function
 def generate_uniform_dataset(n_features,score_function):
     """
     n_features: Number of features in the dataset.
@@ -40,48 +50,49 @@ def generate_hidden_dataset(n_features,N_samples,p,score_function,seed=None):
     X = np.asarray(hidden_bit_generator(n_features,p,N_samples,seed=seed), dtype=np.float32)
     scores = score_function(X).astype(np.float32)
     return {"X": X, "scores": scores}
+### -------------------------------------------------------------------------------------------
+
+### -------------------------------------------------------------------------------------------
+### Generate dataset based on a descriptive sampler (which also allows support for 
+### hidden variables) and a score function, returning a pandas DataFrame with features and scores.
+def generate_dataset(sampler, score_function, N, seed=None):
+    rng = np.random.default_rng(seed)
+    features = sampler(N, rng)
+
+    dataset = pd.DataFrame(features)
+    dataset["score"] = score_function(features)
+
+    return dataset
+
+### Descriptive sampler example
+def temp_sampler(N, rng):
+    x1 = binary_feature_generator(p=0.5, N=N, seed=rng)
+    x2 = gaussian_feature_generator(mean=0, std=1, N=N, seed=rng)
+    return {
+        "x1": x1,
+        "modulated_x2": x1*x2,
+    }
+
 
 ### Generate and save datasets
 def main():
-    n_features = 3
-    N_samples = 1000
-    seed = 0
-    coefficients = (1, 1, 1)
-    p3_values = np.linspace(0.1, 0.9, 30)
-    lambda_values = np.linspace(0.0, 1.0, 30)
+    dataset = generate_dataset(
+        sampler=temp_sampler,
+        score_function=binary_score,
+        N=1000,
+        seed=0,
+    )
 
     cache_dir = (
         Path(__file__).resolve().parents[2]
-        / "caches" / "data_cache" / "experiments_21_10_26" / "experiment1"
+        / "caches" / "data_cache"
     )
     cache_dir.mkdir(parents=True, exist_ok=True)
 
-    for p_index, p3 in enumerate(p3_values):
-        p = np.array([0.5, 0.5, p3])
-        sample_seed = seed + p_index
-        # Reuse inputs across lambda values to isolate changes in the score.
-        X = np.asarray(
-            bernoulli_bit_generator(n_features, p, N_samples, seed=sample_seed),
-            dtype=np.float32,
-        )
-        for lambda_index, lambda_value in enumerate(lambda_values):
-            scores = nonlinear_score(X, lambda_value, *coefficients).astype(np.float32)
-            output_path = cache_dir / (
-                f"p{p_index:02d}_{p3:.4f}_lambda{lambda_index:02d}_{lambda_value:.4f}.npz"
-            )
-            # p stores all three probabilities; the filename reports p3.
-            np.savez(
-                output_path,
-                X=X,
-                scores=scores,
-                p=p,
-                lambda_value=lambda_value,
-                coefficients=np.asarray(coefficients),
-                seed=sample_seed,
-                N_samples=N_samples,
-            )
+    output_path = cache_dir / "test_dataset.csv"
+    dataset.to_csv(output_path, index=False)
 
-    print(f"Saved {len(p3_values) * len(lambda_values)} datasets to: {cache_dir}")
+    print(f"Saved dataset to: {output_path}")
 
 
 if __name__ == "__main__":
