@@ -38,7 +38,7 @@ def feature_decomposition_shapely(x, X, feature, func):
 
     return phiA, phiB
 
-def exact_shapely_decomposition(x, X, func):
+def shapely_values_decomposition(x, X, func):
     """
     x: The input sample for which the Shapely values should be computed
     X: The dataset used for conditional shapely

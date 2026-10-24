@@ -16,6 +16,7 @@ if __package__ in (None, ""):
 
 from .Utils.score_functions import nonlinear_score, binary_score
 from .Utils.generators import binary_feature_generator, gaussian_feature_generator, uniform_feature_generator, count_feature_generator, categorical_feature_generator, uniform_bit_generator, bernoulli_bit_generator, hidden_bit_generator
+from .Utils.samplers import temp_sampler
 
 ### -------------------------------------------------------------------------------------------
 ### Primitive generators for synthetic datasets
@@ -63,16 +64,6 @@ def generate_dataset(sampler, score_function, N, seed=None):
     dataset["score"] = score_function(features)
 
     return dataset
-
-### Descriptive sampler example
-def temp_sampler(N, rng):
-    x1 = binary_feature_generator(p=0.5, N=N, seed=rng)
-    x2 = gaussian_feature_generator(mean=0, std=1, N=N, seed=rng)
-    return {
-        "x1": x1,
-        "modulated_x2": x1*x2,
-    }
-
 
 ### Generate and save datasets
 def main():

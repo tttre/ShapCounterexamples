@@ -11,12 +11,12 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.Data.Utils.score_functions import binary_score
-from src.SHAP.exact_shapely_decomposition import exact_shapely_decomposition
+from src.SHAP.shapely_values_decomposition import shapely_values_decomposition
 
 
 def feature_importance(X):
     decompositions = [
-        exact_shapely_decomposition(
+        shapely_values_decomposition(
             x, X, binary_score
         )
         for x in X

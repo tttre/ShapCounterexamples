@@ -10,7 +10,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.Data.synthesis import generate_hidden_dataset, generate_bernouilli_dataset
 from src.Data.Utils.score_functions import binary_score
-from src.SHAP.exact_shapely import feature_importance
+from src.SHAP.shapely_values import feature_importance
 from src.SHAP.interventional_contribution import interventional_contribution
 
 ### Hidden Feature Journal Experiment Reproduction
