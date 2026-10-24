@@ -68,7 +68,7 @@ def experiment2():
         disagreement_scores[i] = 0.5 * np.abs(
             normalized_importance - normalized_contributions
         ).sum()
-        correlations[i] = np.corrcoef(X, rowvar=False)[0, 1]
+        correlations[i] = np.corrcoef(X[:, 0], X[:, 1])[0, 1]
 
     # Each point represents one dataset.
     fig, ax = plt.subplots(figsize=(6, 4))
