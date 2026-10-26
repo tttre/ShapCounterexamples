@@ -14,9 +14,9 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
     __package__ = "src.Data"
 
-from .Utils.score_functions import nonlinear_score, binary_score
+from .Utils.score_functions import nonlinear_score, binary_score, house_price_score
 from .Utils.generators import binary_feature_generator, gaussian_feature_generator, uniform_feature_generator, count_feature_generator, categorical_feature_generator, uniform_bit_generator, bernoulli_bit_generator, hidden_bit_generator
-from .Utils.samplers import temp_sampler
+from .Utils.samplers import temp_sampler, house_sampler
 
 from .Simulator.retention import OBSERVED_FEATURES, retention_generator
 
@@ -90,8 +90,8 @@ def generate_retention_dataset(n=10_000, seed = 0):
 ### Generate and save datasets
 def main():
     dataset = generate_dataset(
-        sampler=temp_sampler,
-        score_function=binary_score,
+        sampler=house_sampler,
+        score_function=house_price_score,
         N=1000,
         seed=0,
     )
@@ -102,7 +102,7 @@ def main():
     )
     cache_dir.mkdir(parents=True, exist_ok=True)
 
-    output_path = cache_dir / "test_dataset.csv"
+    output_path = cache_dir / "house_price_dataset.csv"
     dataset.to_csv(output_path, index=False)
 
     print(f"Saved dataset to: {output_path}")
