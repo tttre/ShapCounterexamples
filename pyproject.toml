@@ -6,8 +6,17 @@ dependencies = [
     "matplotlib>=3.11.2",
     "numpy>=2.5.3",
     "pandas",
+    "scikit-learn>=1.9.1",
+    "shap>=0.54.1",
     "torch>=2.14.1",
+    "xgboost>=3.4.1",
 ]
 
 [tool.pyright]
 extraPaths = ["SHAP Counterexamples/src"]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.4.0",
+    "notebook>=7.6.3",
+]
