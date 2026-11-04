@@ -16,7 +16,7 @@ if __package__ in (None, ""):
 
 from .Utils.score_functions import nonlinear_score, binary_score, house_price_score
 from .Utils.generators import binary_feature_generator, gaussian_feature_generator, uniform_feature_generator, count_feature_generator, categorical_feature_generator, uniform_bit_generator, bernoulli_bit_generator, hidden_bit_generator
-from .Utils.samplers import temp_sampler, house_sampler
+from .Utils.samplers import temp_sampler, conditional_house_sampler
 
 ### -------------------------------------------------------------------------------------------
 ### Primitive generators for synthetic datasets
@@ -68,7 +68,7 @@ def generate_dataset(sampler, score_function, N, seed=None):
 ### Generate and save datasets
 def main():
     dataset = generate_dataset(
-        sampler=house_sampler,
+        sampler=conditional_house_sampler,
         score_function=house_price_score,
         N=1000,
         seed=0,

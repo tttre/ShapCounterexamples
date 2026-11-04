@@ -10,8 +10,9 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.Data.synthesis import generate_hidden_dataset, generate_bernouilli_dataset
 from src.Data.Utils.score_functions import binary_score
-from src.SHAP.shapely_values import feature_importance
+from src.SHAP.Utils.feature_importance import feature_importance
 from src.SHAP.interventional_contribution import interventional_contribution
+from src.SHAP.shapely_values import shapely_values, kNN_shapely_values
 
 ### Hidden Feature Journal Experiment Reproduction
 def experiment1():
@@ -30,7 +31,7 @@ def experiment1():
         X = dataset["X"]
 
         # Normalized feature importance
-        importance = feature_importance(X, binary_score)
+        importance = feature_importance(X, binary_score, shapely_values)
         normalized_importance = importance / importance.sum()
         disagreement_score = 0.5 * np.abs(normalized_importance - normalized_contributions).sum()
         disagreement_scores.append(disagreement_score)
@@ -63,7 +64,7 @@ def experiment2():
             n_features, N_samples, 0.5, score_function, seed=seed + i
         )
         X = dataset["X"]
-        importance = feature_importance(X, score_function)
+        importance = feature_importance(X, score_function, shapely_values)
         normalized_importance = importance / importance.sum()
         disagreement_scores[i] = 0.5 * np.abs(
             normalized_importance - normalized_contributions
@@ -101,7 +102,7 @@ def experiment3():
             dataset = generate_hidden_dataset(
                 n_features, N_samples, p, score_function, seed=seed
             )
-            importance = feature_importance(dataset["X"], score_function)
+            importance = feature_importance(dataset["X"], score_function, kNN_shapely_values)
             normalized_importance = importance / importance.sum()
             disagreement_scores[row, col] = 0.5 * np.abs(
                 normalized_importance - normalized_contributions
@@ -118,6 +119,7 @@ def experiment3():
     fig.colorbar(image, ax=ax, label="Disagreement score D")
     fig.tight_layout()
     plt.show()
+
 
 
 if __name__ == "__main__":

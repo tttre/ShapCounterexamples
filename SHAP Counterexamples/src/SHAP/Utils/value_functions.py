@@ -9,7 +9,7 @@ def mean_value_function(fixed_features, fixed_values, data, func):
     matches = np.all(data[:, fixed_features] == fixed_values,axis=1) #Creates a mask
     return np.asarray(func(data[matches])).mean().item()
 
-### k Nearest Neighbour Value Function pool is either 
+### k Nearest Neighbour Value Function, pool is either 
 ### 1) a large generated sample from the known distribution of the features
 ### 2) the dataset, if the distribution is unknown
 def kNN_value_function(fixed_features, fixed_values, pool, func, continuous_features, k):
@@ -56,3 +56,12 @@ def kNN_value_function(fixed_features, fixed_values, pool, func, continuous_feat
     # take now the first k of these and mean.
     selected = {name: column[indices] for name, column in pool.items()}
     return np.asarray(func(selected)).mean().item()
+
+### Mean Value Function for Causal SHAP
+def causal_value_function(fixed, sampler, func, N=10_000, seed=0):
+    pool = sampler(
+        N,
+        np.random.default_rng(seed),
+        fixed=fixed,
+    )
+    return np.asarray(func(pool)).mean().item()
