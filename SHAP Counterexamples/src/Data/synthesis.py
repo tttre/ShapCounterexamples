@@ -18,8 +18,6 @@ from .Utils.score_functions import nonlinear_score, binary_score, house_price_sc
 from .Utils.generators import binary_feature_generator, gaussian_feature_generator, uniform_feature_generator, count_feature_generator, categorical_feature_generator, uniform_bit_generator, bernoulli_bit_generator, hidden_bit_generator
 from .Utils.samplers import temp_sampler, house_sampler
 
-from .Simulator.retention import OBSERVED_FEATURES, retention_generator
-
 ### -------------------------------------------------------------------------------------------
 ### Primitive generators for synthetic datasets
 ### Generate Dataset based on a generator and a score function
@@ -66,26 +64,6 @@ def generate_dataset(sampler, score_function, N, seed=None):
     dataset["score"] = score_function(features)
 
     return dataset
-
-### -------------------------------------------------------------------------------------------
-### Generate a dataset according to the retention simulator (Microsoft paper)
-def generate_retention_dataset(n=10_000, seed = 0):
-    """Generate observed retention features and a binary renewal target.
-
-    Returns a DataFrame containing the eight observed features and a
-    'score' column, following the existing dataset convention.
-    """
-    simulation = retention_generator(n=n, seed=seed)
-
-    dataset = pd.DataFrame({
-        name: simulation[name]
-        for name in OBSERVED_FEATURES
-    })
-
-    dataset["score"] = simulation["Did renew"]
-
-    return dataset
-
 
 ### Generate and save datasets
 def main():
