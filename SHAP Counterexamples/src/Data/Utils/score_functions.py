@@ -30,4 +30,9 @@ def house_price_score(features):
         2000 * features["area"]
         + 50_000 * (features["location"] == "city")
     )
+
+def house_price_score_2(features):
+    return (
+        2000 * features["area"]
+    )
 ### -------------------------------------------------------------------------------------------

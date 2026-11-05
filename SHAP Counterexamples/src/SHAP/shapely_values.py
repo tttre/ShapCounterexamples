@@ -5,7 +5,7 @@
 import numpy as np
 from itertools import combinations
 from math import comb
-from .Utils.value_functions import mean_value_function, kNN_value_function, causal_value_function
+from .Utils.value_functions import mean_value_function, kNN_value_function, causal_value_function, interventional_value_function
 from ..Data.Utils.samplers import temp_sampler
 
 ### -------------------------------------------------------------------
@@ -144,9 +144,43 @@ def causal_feature_shapely(x, sampler, feature, func, feature_names, N, seed=0):
     return phi
 ### -------------------------------------------------------------------
 
+### -------------------------------------------------------------------
+### Interventional SHAP
 
-### Population feature importance
-def feature_importance(X, func):
-    rows, counts = np.unique(X, axis=0, return_counts=True)
-    shap_values = np.array([shapely_values(x, X, func) for x in rows])
-    return np.average(np.abs(shap_values), axis=0, weights=counts)
+### Determine the interventional Shapley value for a given feature
+def interventional_feature_shapely(x, pool, feature, func):
+    d = len(pool)
+    others = [i for i in range(d) if i != feature]
+    phi = 0.0
+
+    for size in range(d):
+        for coalition in combinations(others, size):
+            S = list(coalition)
+            S_with_feature = S + [feature]
+
+            value_without = interventional_value_function(S, x[S], pool, func)
+            value_with = interventional_value_function(S_with_feature, x[S_with_feature], pool, func)
+
+            weight = 1 / (d * comb(d - 1, size))
+
+            phi += weight * (value_with - value_without)
+
+    return phi
+
+
+### Compute interventional Shapely values for some model func
+def interventional_shapely_values(x, pool, func):
+    """
+    x: The input sample for which the Shapely values should be computed
+    pool: The background samples, stored as feature names mapped to arrays
+    func: The explainable function
+    """
+    x = np.asarray(x, dtype=object)
+    d = len(pool)
+    phi = np.zeros(d)
+
+    for feature in range(d):
+        phi[feature] = interventional_feature_shapely(x, pool, feature, func)
+
+    return phi
+### -------------------------------------------------------------------

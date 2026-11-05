@@ -57,6 +57,18 @@ def kNN_value_function(fixed_features, fixed_values, pool, func, continuous_feat
     selected = {name: column[indices] for name, column in pool.items()}
     return np.asarray(func(selected)).mean().item()
 
+### Mean Value Function for Interventional SHAP
+def interventional_value_function(fixed_features, fixed_values, pool, func):
+    names = list(pool)
+    N = len(pool[names[0]])
+
+    changed = {name: column.copy() for name, column in pool.items()}
+
+    for feature, value in zip(fixed_features, fixed_values):
+        changed[names[feature]] = np.full(N, value)
+
+    return np.asarray(func(changed)).mean().item()
+
 ### Mean Value Function for Causal SHAP
 def causal_value_function(fixed, sampler, func, N=10_000, seed=0):
     pool = sampler(
