@@ -65,27 +65,4 @@ def causal_house_sampler(N, rng, fixed=None):
         "location": location,
     }
 
-def causal_house_sampler_2(N, rng, fixed=None):
-    fixed = {} if fixed is None else fixed
-
-    # Sample the original distribution
-    bedroom_noise = rng.poisson(2, size=N)
-    area_noise = rng.normal(0, 10, size=N)
-
-    # Assignment function for intervention on set "fixed"
-    def assign(name, natural_values):
-        if name in fixed:
-            return np.full(N, fixed[name])
-        return natural_values
-
-    # Assign values to each feature, applying interventions if specified, recording causal effects
-    bedrooms = assign("bedrooms",np.minimum(1 + bedroom_noise, 5),)
-
-    area = assign("area",np.maximum(20 + 25 * bedrooms + area_noise, 20),)
-
-
-    return {
-        "bedrooms": bedrooms,
-        "area": area,
-    }
 ### --------------------------------
