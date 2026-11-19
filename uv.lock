@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.12"
 resolution-markers = [
     "python_full_version >= '3.14' and sys_platform == 'win32'",
@@ -2524,6 +2524,7 @@ dependencies = [
     { name = "numpy" },
     { name = "pandas" },
     { name = "scikit-learn" },
+    { name = "scipy" },
     { name = "shap" },
     { name = "torch" },
     { name = "xgboost" },
@@ -2541,6 +2542,7 @@ requires-dist = [
     { name = "numpy", specifier = ">=2.5.3" },
     { name = "pandas" },
     { name = "scikit-learn", specifier = ">=1.9.1" },
+    { name = "scipy", specifier = ">=1.18.1" },
     { name = "shap", specifier = ">=0.54.1" },
     { name = "torch", specifier = ">=2.14.1" },
     { name = "xgboost", specifier = ">=3.4.1" },

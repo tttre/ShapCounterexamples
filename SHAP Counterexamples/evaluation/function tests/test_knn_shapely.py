@@ -6,11 +6,11 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-from src.Data.Utils.samplers import temp_sampler, house_sampler
+from src.Data.Utils.samplers import temp_sampler, conditional_house_sampler
 from src.Data.Utils.score_functions import binary_score, house_price_score
 from src.SHAP.shapely_values import kNN_shapely_values
 
-pool = house_sampler(10000, np.random.default_rng(1))
+pool = conditional_house_sampler(10000, np.random.default_rng(1))
 dataset = pd.read_csv(ROOT / "caches/data_cache/house_price_dataset.csv")
 X = dataset[list(pool)].to_numpy()
 

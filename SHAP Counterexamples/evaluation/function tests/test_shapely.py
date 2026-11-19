@@ -8,10 +8,11 @@ from pathlib import Path
 import sys
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(PROJECT_ROOT / "src"))
+sys.path.insert(0, str(PROJECT_ROOT))
 
-from Data.Utils.score_functions import binary_score
-from SHAP.shapely_values import shapely_values
+from src.Data.Utils.score_functions import binary_score
+from src.Data.Utils.generators import uniform_bit_generator
+from src.SHAP.shapely_values import shapely_values
 
 
 def feature_importance(X):
@@ -22,10 +23,7 @@ def feature_importance(X):
 
     return np.abs(shap_values).mean(axis=0)
 
-caches = PROJECT_ROOT / "caches"
-
-# Load inputs.
-with np.load(caches / "data_cache" / "bit_data.npz") as data:
-    X = data["X"]
+# Generate all three-bit inputs.
+X = uniform_bit_generator(3)
 
 print("Feature Importance:", feature_importance(X))
